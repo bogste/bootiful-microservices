@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +39,6 @@ public class DemoApplication {
                     .forEach(n -> rr.save(new Reservation(n)));
 
             rr.findAll().forEach(System.out::println);
-
         };
     }
 }
@@ -59,23 +56,10 @@ class ReservationRestController {
 
 }
 
-@Controller
-class ReservationMvcController {
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @RequestMapping("/reservations.php")
-    String page(Model model) {
-        model.addAttribute("reservations", this.reservationRepository.findAll());
-        return "reservations"; //  src/main/resources/templates + $X + .html
-    }
-
-}
-
 interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     Collection<Reservation> findByReservationName(String rn);
+    Reservation findById(Long id);
 }
 
 

@@ -34,6 +34,7 @@ public class DemoApplication {
 
     @Bean
     CommandLineRunner dc(DiscoveryClient dc) {
+        // Service instances lookup via Discovery Client
         return args ->
                 dc.getInstances("reservation-service")
                         .forEach(si -> System.out.println(
@@ -42,6 +43,7 @@ public class DemoApplication {
 
     @Bean
     CommandLineRunner rt(RestTemplate restTemplate) {
+        // Fetching via RestTemplate
         return args -> {
             ParameterizedTypeReference<List<Reservation>> ptr
                     = new ParameterizedTypeReference<List<Reservation>>() {
@@ -57,15 +59,15 @@ public class DemoApplication {
 
     @Bean
     CommandLineRunner feign(ReservationsRestClient client) {
-        return args ->
-                client.getReservations().forEach(System.out::println);
+        // Data fetching via Netflix Feign
+        return args -> client.getReservations()
+                .forEach(System.out::println);
     }
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
 }
-
 
 @Component
 class ReservationIntegration {
@@ -100,7 +102,6 @@ class ReservationNamesRestController {
     private ReservationIntegration reservationIntegration;
 
 }
-
 
 @FeignClient("reservation-service")
 interface ReservationsRestClient {
