@@ -93,13 +93,13 @@ class ReservationIntegration {
 @RequestMapping ("/reservations")
 class ReservationNamesRestController {
 
+    @Autowired
+    private ReservationIntegration reservationIntegration;
+
     @RequestMapping("/names")
     Collection<String> rs() {
         return this.reservationIntegration.getReservationNames();
     }
-
-    @Autowired
-    private ReservationIntegration reservationIntegration;
 
 }
 

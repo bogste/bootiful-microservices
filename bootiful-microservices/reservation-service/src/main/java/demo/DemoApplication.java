@@ -3,8 +3,6 @@ package demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
@@ -27,11 +25,6 @@ public class DemoApplication {
     }
 
     @Bean
-    HealthIndicator ccc() {
-        return () -> Health.status("I <3 Chicago!").build();
-    }
-
-    @Bean
     CommandLineRunner runner(ReservationRepository rr) {
         return args -> {
 
@@ -41,6 +34,7 @@ public class DemoApplication {
             rr.findAll().forEach(System.out::println);
         };
     }
+
 }
 
 @RestController
@@ -75,6 +69,10 @@ class Reservation {
     public Reservation() { // why JPA why???
     }
 
+    public Reservation(String reservationName) {
+        this.reservationName = reservationName;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -91,7 +89,4 @@ class Reservation {
         return reservationName;
     }
 
-    public Reservation(String reservationName) {
-        this.reservationName = reservationName;
-    }
 }
